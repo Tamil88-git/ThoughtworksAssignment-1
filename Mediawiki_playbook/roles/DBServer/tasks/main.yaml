@@ -7,16 +7,16 @@
   systemd: state=started name=mariadb
 
 - name: prepare the script to secure the databsae.
-  template: src=../templates/secure.sh.j2 dest='/tmp/secure.sh' mode=0755
+  template: src=../templates/passwdfile.sh.j2 dest='/tmp/passwdfile.sh' mode=0755
 
 - name: check whether the MySQL Database is secured. 
   stat: path='/tmp/secure_temp.log' 
-  register: secure_temp_file
+  register: passwd_temp_file
 
 - name: Secure the database.
-  shell: "/tmp/secure.sh > /tmp/secure_temp.log"
-  register: secure_log
-  when: secure_temp_file.stat.exists != true
+  shell: "/tmp/passwdfile.sh > /tmp/passwd_temp.log"
+  register: passwd_log
+  when: passwd_temp_file.stat.exists != true
 
 ###
 - name: Create a new database with name 'wikidatabase'
